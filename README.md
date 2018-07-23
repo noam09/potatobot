@@ -50,15 +50,15 @@ Controlling the bot:
 
 Start the bot:
 
-![Start Bot](https://raw.githubusercontent.com/noam09/potatobot/master/images/start.jpg)
+![Start Bot](https://i.imgur.com/4ni9fDm.png)
 
 Send `/help` to show the list of available commands:
 
-![List Commands](https://raw.githubusercontent.com/noam09/potatobot/master/images/commands.jpg)
+![List Commands](https://i.imgur.com/okomCfX.png)
 
 Send `/q QUERY` and use the custom keyboard to select a movie result:
 
-![Select Movie](https://raw.githubusercontent.com/noam09/potatobot/master/images/select-movie.jpg)
+![Select Movie](https://i.imgur.com/zGkv7Pm.png)
 
 ## TODO
 
