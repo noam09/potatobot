@@ -62,6 +62,8 @@ Send `/q QUERY` and use the custom keyboard to select a movie result:
 
 ## TODO
 
+* Makefile
+* systemd service file
 * Add group command support (`/command@bot`)
 * Check if exists in library
   * Prompt to re-add
