@@ -18,6 +18,14 @@ cd potatobot
 go build main.go
 ```
 
+## Install
+
+Use `go install` to get and build PotatoBot, making it available in `$GOPATH/bin/potatobot`:
+
+```console
+go install github.com/noam09/potatobot
+```
+
 ## Usage
 
 Running the bot:
