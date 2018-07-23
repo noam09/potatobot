@@ -4,9 +4,9 @@
 
 ## Dependencies
 
-* https://github.com/noam09/go-couchpotato-api
-* https://github.com/go-telegram-bot-api/telegram-bot-api
-* https://github.com/docopt/docopt-go
+* [go-couchpotato-api](https://github.com/noam09/go-couchpotato-api)
+* [telegram-bot-api](https://github.com/go-telegram-bot-api/telegram-bot-api)
+* [docopt-go](https://github.com/docopt/docopt-go)
 
 ## Usage
 
