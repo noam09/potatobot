@@ -4,8 +4,7 @@
 [[projects]]
   name = "github.com/docopt/docopt-go"
   packages = ["."]
-  revision = "784ddc588536785e7299f7272f39101f7faccc3f"
-  version = "0.6.2"
+  revision = "ee0de3bc6815ee19d4a46c7eb90f829db0e014b1"
 
 [[projects]]
   name = "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -28,6 +27,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c3087ad9229f1abd56eef585471c4924a6ac6332f2dc376b058859e8b843a9eb"
+  inputs-digest = "5755acb4a6b5060c9ee5cbfd635662534f942eb605663c0eb8af7314bc1c5201"
   solver-name = "gps-cdcl"
   solver-version = 1
