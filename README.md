@@ -8,6 +8,16 @@
 * [telegram-bot-api](https://github.com/go-telegram-bot-api/telegram-bot-api)
 * [docopt-go](https://github.com/docopt/docopt-go)
 
+## Build
+
+Clone this repository and `go build`:
+
+```console
+git clone https://github.com/noam09/potatobot
+cd potatobot
+go build main.go
+```
+
 ## Usage
 
 Running the bot:
