@@ -54,7 +54,7 @@ Controlling the bot:
 ❎ /c - Cancel current operation
 ```
 
-**Protip:** Sending PotatoBot an IMDB title ID by itself (e.g. `tt123456`) will add the title to the snatchlist.
+**💡 Protip!** Sending PotatoBot an IMDB title ID by itself (e.g. `tt123456`) will add the title to the snatchlist.
 
 ## Screenshots
 
