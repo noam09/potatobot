@@ -80,6 +80,10 @@ Send `/q QUERY` and use the custom keyboard to select a movie result:
 * On-the-fly user whitelisting?
 * Choose quality profile other than the default
 
+## Development
+
+Contributions are always welcome, just create a [pull request](https://github.com/noam09/potatobot/pulls).
+
 ## License
 
 This is free software under the GPL v3 open source license. Feel free to do with it what you wish, but any modification must be open sourced. A copy of the license is included.
