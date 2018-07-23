@@ -1,6 +1,6 @@
 # PotatoBot
 
-🥔🤖 A simple Telegram bot for controlling CouchPotato.
+🥔🤖 A simple [Telegram](https://telegram.org) bot for controlling [CouchPotato](https://github.com/CouchPotato/CouchPotatoServer).
 
 ## Dependencies
 
