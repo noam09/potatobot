@@ -147,13 +147,13 @@ Options:
 						// log.Printf("Votes: %v", a.Rating.Score[1])
 						votes = int(a.Rating.Score[1])
 						// Add the result to the message containing the list of results
-						msgBody += fmt.Sprintf("*%d*) [%s (%d)](https://imdb.com/title/%s) %s _%v (%v) - %dm_\n",
+						msgBody += fmt.Sprintf("*%d)* [%s (%d)](https://imdb.com/title/%s) %s _%v (%v) - %dm_\n",
 							resultCount, a.Title, a.Year, a.Imdb, emojiStar, rating, votes, a.Runtime)
 					} else {
 						rating = 0
 						votes = 0
 						// Add the result to the message containing the list of results (without rating)
-						msgBody += fmt.Sprintf("*%d*) [%s (%d)](https://imdb.com/title/%s) - _%dm_\n",
+						msgBody += fmt.Sprintf("*%d)* [%s (%d)](https://imdb.com/title/%s) - _%dm_\n",
 							resultCount, a.Title, a.Year, a.Imdb, a.Runtime)
 					}
 				}
