@@ -224,8 +224,8 @@ Options:
 		} else {
 			switch strings.TrimSpace(strings.ToLower(update.Message.Text)) {
 			case "/start":
-				msg.Text = "start"
-			case "/help":
+				msg.Text = "Hi! Use /q to start searching"
+			case "/help", "/h":
 				msg.Text = fmt.Sprintf("%s /q - Movie search", emojiFilm)
 				msg.Text += fmt.Sprintf("\n\n%s /f - Run full search for all wanted movies", emojiSearch)
 				msg.Text += fmt.Sprintf("\n\n%s /c - Cancel current operation", emojiCancel)
@@ -233,27 +233,14 @@ Options:
 			case "/q":
 				msg.Text = fmt.Sprintf("/q should be followed by a search query. Example:\n`/q Inception`\n")
 				msg.ParseMode = "markdown"
-			case "/cancel":
+			case "/cancel", "/c":
 				// Cancel
 				msg.Text = "Cancelling"
 				msg.ReplyMarkup = tgbotapi.ReplyKeyboardRemove{
 					RemoveKeyboard: true,
 					Selective:      false,
 				}
-			case "/c":
-				// Cancel
-				msg.Text = "Cancelling"
-				msg.ReplyMarkup = tgbotapi.ReplyKeyboardRemove{
-					RemoveKeyboard: true,
-					Selective:      false,
-				}
-			case "/full":
-				_, err := cp.FullSearch()
-				if err != nil {
-					log.Println(err)
-				}
-				msg.Text = "Running full search for all wanted movies"
-			case "/f":
+			case "/full", "/f":
 				_, err := cp.FullSearch()
 				if err != nil {
 					log.Println(err)
