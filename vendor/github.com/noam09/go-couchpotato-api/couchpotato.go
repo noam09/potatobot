@@ -63,7 +63,7 @@ type Poster struct {
 // NewClient returns a new CP HTTP client
 func NewClient(hostname string, port int, apiKey, urlBase string, ssl bool, username, password string) (c *client) {
 	auth := true
-	return &client{hostname, 5050, apiKey, urlBase, ssl, username, password, auth, &http.Client{Timeout: 10 * time.Second}}
+	return &client{hostname, port, apiKey, urlBase, ssl, username, password, auth, &http.Client{Timeout: 10 * time.Second}}
 }
 
 func (c *client) GetApiKey(serverUrl string) (string, error) {

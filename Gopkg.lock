@@ -16,7 +16,7 @@
   branch = "master"
   name = "github.com/noam09/go-couchpotato-api"
   packages = ["."]
-  revision = "e89be06a46f98526e5f88690e6f2ea4463e8e896"
+  revision = "d364f4102468e42cf4b66c0c16518ab063ea8745"
 
 [[projects]]
   name = "github.com/technoweenie/multipartstreamer"
