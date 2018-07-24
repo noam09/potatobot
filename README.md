@@ -23,6 +23,7 @@ go build main.go
 Use `go install` to get and build PotatoBot, making it available in `$GOPATH/bin/potatobot`:
 
 ```console
+go get -u github.com/noam09/potatobot
 go install github.com/noam09/potatobot
 ```
 
