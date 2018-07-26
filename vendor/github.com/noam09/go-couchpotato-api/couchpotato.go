@@ -47,6 +47,16 @@ type Movie struct {
 	Images  Poster     `json:"images,omitempty"`
 	Runtime int        `json:"runtime,omitempty"`
 	Rating  ImdbRating `json:"rating,omitempty"`
+	// Library InLibrary `json:"in_library,string"`
+}
+
+type InLibrary struct {
+	IsSet bool `json:"-"`
+	InLibraryStatus
+}
+
+type InLibraryStatus struct {
+	Status string `json:"status,omitempty"`
 }
 
 type ImdbRating struct {
@@ -65,6 +75,17 @@ func NewClient(hostname string, port int, apiKey, urlBase string, ssl bool, user
 	auth := true
 	return &client{hostname, port, apiKey, urlBase, ssl, username, password, auth, &http.Client{Timeout: 10 * time.Second}}
 }
+
+/*
+func (w *InLibrary) UnmarshalJSON(data []byte) error {
+  if id, err := strconv.Atoi(string(data)); err == nil {
+    w.IsSet = id
+    w.IsSet = true
+    return nil
+  }
+  return json.Unmarshal(data, &w.Sprocket)
+}
+*/
 
 func (c *client) GetApiKey(serverUrl string) (string, error) {
 	var errorMsg string
@@ -246,13 +267,13 @@ func (c *client) SearchMovie(q string) (*MovieResults, error) {
 			if resultCount == 0 {
 				errorMsg := "No results found, either try again or change search terms"
 				log.Println(errorMsg)
-				tries += 1
+				// tries += 1
 			} else {
 				return val, nil
 			}
 		} else {
 			log.Println(resp.StatusCode)
-			tries += 1
+			// tries += 1
 		}
 	}
 	return &MovieResults{}, errors.New(errorMsg)
