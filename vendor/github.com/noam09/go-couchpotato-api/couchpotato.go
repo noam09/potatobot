@@ -83,7 +83,7 @@ func (w *InLibrary) UnmarshalJSON(data []byte) error {
     w.IsSet = true
     return nil
   }
-  return json.Unmarshal(data, &w.Sprocket)
+  return json.Unmarshal(data, &w.InLibrary)
 }
 */
 
