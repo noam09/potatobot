@@ -52,10 +52,16 @@ Options:
 	log.Println(opts)
 
 	// Get whitelist
-	var whitelist []int
+	var whitelist []int64
 	w := opts["--whitelist"].([]string)
 	for _, v := range w {
+		/*
 		i, err := strconv.Atoi(v)
+		if err != nil {
+			continue
+		}
+		*/
+		i, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
 			continue
 		}
@@ -103,12 +109,12 @@ Options:
 			continue
 		}
 		// Check if user ID in whitelist
-		if !intInSlice(update.Message.From.ID, whitelist) {
+		if !intInSlice(update.Message.Chat.ID, whitelist) {
 			// log.Println("not me")
 			continue
 		}
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+		log.Printf("[%d][%s] %s", update.Message.Chat.ID, update.Message.From.UserName, update.Message.Text)
 		lowerMessageText := strings.ToLower(update.Message.Text)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
@@ -285,7 +291,7 @@ Options:
 	} // end updates
 } // end main
 
-func intInSlice(a int, list []int) bool {
+func intInSlice(a int64, list []int64) bool {
 	for _, b := range list {
 		if b == a {
 			return true
