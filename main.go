@@ -56,10 +56,10 @@ Options:
 	w := opts["--whitelist"].([]string)
 	for _, v := range w {
 		/*
-		i, err := strconv.Atoi(v)
-		if err != nil {
-			continue
-		}
+			i, err := strconv.Atoi(v)
+			if err != nil {
+				continue
+			}
 		*/
 		i, err := strconv.ParseInt(v, 10, 64)
 		if err != nil {
@@ -144,16 +144,16 @@ Options:
 						//log.Println(a.Library.Status)
 						library := ""
 						/*
-						if a.Library.Status != "" {
-							if a.Library.Status == "done" {
-								log.Println("IN LIBRARY")
-								library = "(Already in library)"
+							if a.Library.Status != "" {
+								if a.Library.Status == "done" {
+									log.Println("IN LIBRARY")
+									library = "(Already in library)"
+								} else {
+									library = "(Already in snatchlist)"
+								}
 							} else {
-								library = "(Already in snatchlist)"
+								library = ""
 							}
-						} else {
-							library = ""
-						}
 						*/
 						// Create button text for each search result
 						// button := fmt.Sprintf("%s (%d) [%s]\n", a.Titles[0], a.Year, a.Imdb)
@@ -226,7 +226,7 @@ Options:
 			// Find the IMDB ID matched in the received message
 			imdbId := imdb.FindString(lowerMessageText)
 			// Find the IMDB ID matched in the received message
-			title, _ := regexp.Compile(emojiFilm+" (.*) \\[.*\\] \\[tt[0-9]{5,10}\\]")
+			title, _ := regexp.Compile(emojiFilm + " (.*) \\[.*\\] \\[tt[0-9]{5,10}\\]")
 			movieTitle := title.FindStringSubmatch(update.Message.Text)
 			if len(movieTitle) > 1 {
 				t := movieTitle[1]
@@ -255,24 +255,24 @@ Options:
 		} else {
 			log.Println(strings.TrimSpace(lowerMessageText))
 			switch strings.TrimSpace(lowerMessageText) {
-			case "/start",  "/start@"+lowerBotName:
+			case "/start", "/start@" + lowerBotName:
 				msg.Text = "Hi! Use /q to start searching"
-			case "/help", "/h", "/help@"+lowerBotName, "/h@"+lowerBotName:
+			case "/help", "/h", "/help@" + lowerBotName, "/h@" + lowerBotName:
 				msg.Text = fmt.Sprintf("%s /q - Movie search", emojiFilm)
 				msg.Text += fmt.Sprintf("\n\n%s /f - Run full search for all wanted movies", emojiSearch)
 				msg.Text += fmt.Sprintf("\n\n%s /c - Cancel current operation", emojiCancel)
 				msg.ParseMode = "markdown"
-			case "/q", "/q@"+lowerBotName:
+			case "/q", "/q@" + lowerBotName:
 				msg.Text = fmt.Sprintf("/q should be followed by a search query. Example:\n`/q Inception`\n")
 				msg.ParseMode = "markdown"
-			case "/cancel", "/c", "/cancel@"+lowerBotName, "/c@"+lowerBotName:
+			case "/cancel", "/c", "/cancel@" + lowerBotName, "/c@" + lowerBotName:
 				// Cancel
 				msg.Text = "Cancelling"
 				msg.ReplyMarkup = tgbotapi.ReplyKeyboardRemove{
 					RemoveKeyboard: true,
 					Selective:      false,
 				}
-			case "/full", "/f", "/full@"+lowerBotName, "/f@"+lowerBotName:
+			case "/full", "/f", "/full@" + lowerBotName, "/f@" + lowerBotName:
 				_, err := cp.FullSearch()
 				if err != nil {
 					log.Println(err)
