@@ -301,5 +301,5 @@ func intInSlice(a int64, list []int64) bool {
 }
 
 func AppCleanup() {
-	log.Println("CLEANUP APP BEFORE EXIT!!!")
+	log.Println("Exit")
 }

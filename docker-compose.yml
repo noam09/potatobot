@@ -1,0 +1,18 @@
+---
+version: "2"
+
+services:
+  potatobot:
+    image: golang:1.12.7-alpine
+    volumes:
+      - .:/go/src/potatobot
+    working_dir: /go/src/potatobot
+    command: >
+      sh -c 'go run main.go
+      --token=<bot>
+      --key=<apikey>
+      -w <chatid>
+      --host=<host>
+      --port=<port>
+      --base=<urlbase>
+      --ssl'

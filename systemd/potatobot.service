@@ -1,0 +1,34 @@
+# /lib/systemd/system/potatobot.service
+
+[Unit]
+Description=PotatoBot
+ConditionPathExists=$GOPATH/bin/potatobot
+After=network.target
+Requires=network.target
+## Optional: if CouchPotato is started using systemd
+# After=couchpotato.service
+# Requires=couchpotato.service
+ 
+[Service]
+Type=simple
+User=potatobot
+Group=potatobot
+LimitNOFILE=1024
+Restart=always
+RestartSec=10
+# Telegram bot token
+Environment="POTATOBOT_TOKEN=12345678:AABBCCDD-abcdEFGHijklMNOP123"
+# CouchPotato API key
+Environment="CP_API=1234567890abcdefghijklmnopqrstuv"
+# Set the working directory
+WorkingDirectory=/home/me/scripts/
+# Whitelist user ID(s) should be listed here
+ExecStart=$GOPATH/bin/potatobot -t "$POTATO_TOKEN" -k "$CP_API" -w 
+"1234567" -w "87654321" -w "-22334455" -w "-66778899"
+# Logging
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=potatobot
+ 
+[Install]
+WantedBy=multi-user.target
