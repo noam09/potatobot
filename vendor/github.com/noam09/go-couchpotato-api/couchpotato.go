@@ -149,7 +149,11 @@ func (c *client) GetAddr() string {
 	serverUrl += "://" + c.hostname + ":" + strconv.Itoa(c.port)
 
 	if c.urlBase != "" {
-		serverUrl += c.urlBase
+		if string(c.urlBase[0]) == "/" {
+			serverUrl += fmt.Sprintf("%s", c.urlBase)
+		} else {
+			serverUrl += fmt.Sprintf("/%s", c.urlBase)
+		}
 	}
 
 	if c.apiKey == "" {
