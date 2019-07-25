@@ -3,6 +3,7 @@ version: "2"
 
 services:
   potatobot:
+    container_name: potatobot
     image: golang:1.12.7-alpine
     volumes:
       - .:/go/src/potatobot
