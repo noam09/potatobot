@@ -27,6 +27,45 @@ go get -u github.com/noam09/potatobot
 go install github.com/noam09/potatobot
 ```
 
+## docker-compose
+
+A sample `docker-compose.yml` is included.
+
+```console
+# Pull the latest code
+git clone https://github.com/noam09/potatobot
+cd potatobot
+# Modify YAML according to your setup
+nano docker-compose.yml
+# Run the container and send to background
+docker-compose up -d
+```
+
+The `docker-compose.yml` is based on the official `golang:1.12.7-alpine` image:
+
+```yaml
+---
+version: "2"
+
+services:
+  potatobot:
+    image: golang:1.12.7-alpine
+    volumes:
+      - .:/go/src/potatobot
+    working_dir: /go/src/potatobot
+    command: >
+      sh -c 'go run main.go
+      --token=<bot>
+      --key=<apikey>
+      -w <chatid>
+      --host=<host>
+      --port=<port>
+      --base=<urlbase>
+      --ssl'
+```
+
+Modify the `command` section's parameters based on the help-text below.
+
 ## Usage
 
 Running the bot:
