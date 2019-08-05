@@ -118,111 +118,12 @@ Options:
 		lowerMessageText := strings.ToLower(update.Message.Text)
 
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
-
-		if strings.HasPrefix(lowerMessageText, "/q ") || strings.HasPrefix(lowerMessageText, "/q@"+lowerBotName+" ") {
-			// TEST add group support (/command@bot)
-			split := strings.Split(lowerMessageText, "/q@"+lowerBotName+" ")
-			if len(split) < 2 {
-				split = strings.Split(lowerMessageText, "/q ")
-			}
-			if len(split) == 2 {
-				_, q := split[0], split[1]
-				log.Println(q)
-				val, err := cp.SearchMovie(strings.TrimSpace(q))
-				resultCount := 0
-				if val != nil {
-					msgBody := ""
-					var rating float64
-					var votes int
-					// log.Println(len(val.Movies))
-					// Make 2D slice with enough rows for the number of search results
-					// Add one more row for the "/cancel" button
-					rows := make([][]tgbotapi.KeyboardButton, len(val.Movies)+1)
-					// Loop through results
-					for _, a := range val.Movies {
-						//log.Println("STATUS")
-						//log.Println(a.Library.Status)
-						library := ""
-						/*
-							if a.Library.Status != "" {
-								if a.Library.Status == "done" {
-									log.Println("IN LIBRARY")
-									library = "(Already in library)"
-								} else {
-									library = "(Already in snatchlist)"
-								}
-							} else {
-								library = ""
-							}
-						*/
-						// Create button text for each search result
-						// button := fmt.Sprintf("%s (%d) [%s]\n", a.Titles[0], a.Year, a.Imdb)
-						button := fmt.Sprintf("%s %s [%d] [%s]", emojiFilm, a.Title, a.Year, a.Imdb)
-						// In each row, append one column containing a KeyboardButton with the button text
-						rows[resultCount] = append(rows[resultCount], tgbotapi.NewKeyboardButton(button))
-						log.Printf("%s [%d] [%s]\n", a.Title, a.Year, a.Imdb)
-						// log.Printf("Original poster: %s", a.Images.Original[0])
-						// log.Printf("Small poster: %s", a.Images.More[0])
-						// Tally the number of results
-						resultCount += 1
-						// Check if an IMDB rating and the number of votes were fetched
-						if len(a.Rating.Score) == 2 {
-							// log.Printf("Rating: %v", a.Rating.Score[0])
-							rating = a.Rating.Score[0]
-							// log.Printf("Votes: %v", a.Rating.Score[1])
-							votes = int(a.Rating.Score[1])
-							// Add the result to the message containing the list of results
-							msgBody += fmt.Sprintf("*%d)* [%s (%d)](https://imdb.com/title/%s) %s _%v (%v) - %dm_ %s\n",
-								resultCount, a.Title, a.Year, a.Imdb, emojiStar, rating, votes, a.Runtime, library)
-						} else {
-							rating = 0
-							votes = 0
-							// Add the result to the message containing the list of results (without rating)
-							msgBody += fmt.Sprintf("*%d)* [%s (%d)](https://imdb.com/title/%s) - _%dm_\n",
-								resultCount, a.Title, a.Year, a.Imdb, a.Runtime)
-						}
-					}
-					// If there is at least one result ready, create the custom keyboard
-					if resultCount > 0 {
-						button := fmt.Sprintf("/cancel")
-						rows[resultCount] = append(rows[resultCount], tgbotapi.NewKeyboardButton(button))
-						// Init keyboard variable
-						var kb tgbotapi.ReplyKeyboardMarkup
-						kb = tgbotapi.ReplyKeyboardMarkup{
-							ResizeKeyboard:  true,
-							Keyboard:        rows,
-							OneTimeKeyboard: true,
-						}
-						// kb.OneTimeKeyboard = true
-						// Append the custom keyboard to the reply message
-						msg.ReplyMarkup = kb
-						// Append a hint to the results
-						msgBody += "\n\nIf you were expecting more results, try running the same search again"
-						// Append the list of results to the reply message
-						msg.Text = msgBody
-						msg.ParseMode = "markdown"
-						// msg.ReplyToMessageID = update.Message.MessageID
-						// Avoid the first IMDB link being resolved for preview
-						msg.DisableWebPagePreview = true
-					} else {
-						msgBody += "Looks like no results were found. "
-						msgBody += "You might try running the same search again, "
-						msgBody += "sometimes they get lost on the way back!"
-						msg.Text = msgBody
-					}
-				} else {
-					log.Println(err)
-				}
-			} else {
-				log.Println("/q or /q@ prefix but no message?")
-				continue
-			}
-			// Detect if IMDB IDs are sent to the bot (e.g. tt12345678)
-			// Check if the IMDB ID regex matches the received message
-			// IMDB IDs sent to groups are automatically set as a reply (custom keyboard)
-			// so the bot will have access to the message text
-		} else if imdb.MatchString(lowerMessageText) {
+		if imdb.MatchString(lowerMessageText) {
 			log.Println("Found IMDB ID")
+			_, err := bot.Send(tgbotapi.NewChatAction(update.Message.Chat.ID, tgbotapi.ChatTyping))
+			if err != nil {
+				log.Println(err)
+			}
 			// Find the IMDB ID matched in the received message
 			imdbId := imdb.FindString(lowerMessageText)
 			// Find the IMDB ID matched in the received message
@@ -252,13 +153,128 @@ Options:
 				RemoveKeyboard: true,
 				Selective:      false,
 			}
+		} else if strings.HasPrefix(lowerMessageText, "/q ") || strings.HasPrefix(lowerMessageText, "/q@"+lowerBotName+" ") || !strings.HasPrefix(lowerMessageText, "/") {
+			_, err := bot.Send(tgbotapi.NewChatAction(update.Message.Chat.ID, tgbotapi.ChatTyping))
+			if err != nil {
+				log.Println(err)
+			}
+			// TEST add group support (/command@bot)
+			split := strings.Split(lowerMessageText, "/q@"+lowerBotName+" ")
+			q := ""
+			// if a regular /q was sent, or a query alone
+			if len(split) < 2 {
+				split = strings.Split(lowerMessageText, "/q ")
+			}
+			if len(split) == 2 {
+				_, q = split[0], split[1]
+			} else {
+				q = lowerMessageText
+			}
+			log.Println(q)
+			val, err := cp.SearchMovie(strings.TrimSpace(q))
+			resultCount := 0
+			if val != nil {
+				msgBody := ""
+				var rating float64
+				var votes int
+				// log.Println(len(val.Movies))
+				// Make 2D slice with enough rows for the number of search results
+				// Add one more row for the "/cancel" button
+				rows := make([][]tgbotapi.KeyboardButton, len(val.Movies)+1)
+				// Loop through results
+				for _, a := range val.Movies {
+					//log.Println("STATUS")
+					//log.Println(a.Library.Status)
+					library := ""
+					/*
+						if a.Library.Status != "" {
+							if a.Library.Status == "done" {
+								log.Println("IN LIBRARY")
+								library = "(Already in library)"
+							} else {
+								library = "(Already in snatchlist)"
+							}
+						} else {
+							library = ""
+						}
+					*/
+					// Create button text for each search result
+					// button := fmt.Sprintf("%s (%d) [%s]\n", a.Titles[0], a.Year, a.Imdb)
+					button := fmt.Sprintf("%s %s [%d] [%s]", emojiFilm, a.Title, a.Year, a.Imdb)
+					// In each row, append one column containing a KeyboardButton with the button text
+					rows[resultCount] = append(rows[resultCount], tgbotapi.NewKeyboardButton(button))
+					log.Printf("%s [%d] [%s]\n", a.Title, a.Year, a.Imdb)
+					// log.Printf("Original poster: %s", a.Images.Original[0])
+					// log.Printf("Small poster: %s", a.Images.More[0])
+					// Tally the number of results
+					resultCount += 1
+					// Check if an IMDB rating and the number of votes were fetched
+					if len(a.Rating.Score) == 2 {
+						// log.Printf("Rating: %v", a.Rating.Score[0])
+						rating = a.Rating.Score[0]
+						// log.Printf("Votes: %v", a.Rating.Score[1])
+						votes = int(a.Rating.Score[1])
+						// Add the result to the message containing the list of results
+						msgBody += fmt.Sprintf("*%d)* [%s (%d)](https://imdb.com/title/%s) %s _%v (%v) - %dm_ %s\n",
+							resultCount, a.Title, a.Year, a.Imdb, emojiStar, rating, votes, a.Runtime, library)
+					} else {
+						rating = 0
+						votes = 0
+						// Add the result to the message containing the list of results (without rating)
+						msgBody += fmt.Sprintf("*%d)* [%s (%d)](https://imdb.com/title/%s) - _%dm_\n",
+							resultCount, a.Title, a.Year, a.Imdb, a.Runtime)
+					}
+				}
+				// If there is at least one result ready, create the custom keyboard
+				if resultCount > 0 {
+					button := fmt.Sprintf("/cancel")
+					rows[resultCount] = append(rows[resultCount], tgbotapi.NewKeyboardButton(button))
+					// Init keyboard variable
+					var kb tgbotapi.ReplyKeyboardMarkup
+					kb = tgbotapi.ReplyKeyboardMarkup{
+						ResizeKeyboard:  true,
+						Keyboard:        rows,
+						OneTimeKeyboard: true,
+					}
+					// kb.OneTimeKeyboard = true
+					// Append the custom keyboard to the reply message
+					msg.ReplyMarkup = kb
+					// Append a hint to the results
+					msgBody += "\n\nIf you were expecting more results, try running the same search again"
+					// Append the list of results to the reply message
+					msg.Text = msgBody
+					msg.ParseMode = "markdown"
+					// msg.ReplyToMessageID = update.Message.MessageID
+					// Avoid the first IMDB link being resolved for preview
+					msg.DisableWebPagePreview = true
+				} else {
+					msgBody += "Looks like no results were found. "
+					msgBody += "You might try running the same search again, "
+					msgBody += "sometimes they get lost on the way back!"
+					msg.Text = msgBody
+				}
+			} else {
+				log.Println(err)
+			}
+			//} else {
+			//		log.Println("/q or /q@ prefix but no message?")
+			//		continue
+			//	}
+			// Detect if IMDB IDs are sent to the bot (e.g. tt12345678)
+			// Check if the IMDB ID regex matches the received message
+			// IMDB IDs sent to groups are automatically set as a reply (custom keyboard)
+			// so the bot will have access to the message text
 		} else {
 			log.Println(strings.TrimSpace(lowerMessageText))
+			_, err := bot.Send(tgbotapi.NewChatAction(update.Message.Chat.ID, tgbotapi.ChatTyping))
+			if err != nil {
+				log.Println(err)
+			}
 			switch strings.TrimSpace(lowerMessageText) {
 			case "/start", "/start@" + lowerBotName:
-				msg.Text = "Hi! Use /q to start searching"
+				msg.Text = "Hi! Use /q to start searching, or just send a search query without any commands"
 			case "/help", "/h", "/help@" + lowerBotName, "/h@" + lowerBotName:
-				msg.Text = fmt.Sprintf("%s /q - Movie search", emojiFilm)
+				msg.Text = fmt.Sprintf("%s /q - Movie search\nOr simply send a query without any commands", emojiFilm)
 				msg.Text += fmt.Sprintf("\n\n%s /f - Run full search for all wanted movies", emojiSearch)
 				msg.Text += fmt.Sprintf("\n\n%s /c - Cancel current operation", emojiCancel)
 				msg.ParseMode = "markdown"
