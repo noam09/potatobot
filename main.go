@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 
 	"github.com/docopt/docopt-go"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
@@ -18,7 +19,7 @@ func main() {
 	// Set up signal catching
 	sigs := make(chan os.Signal, 1)
 	// Catch all signals
-	signal.Notify(sigs)
+	signal.Notify(sigs, os.Interrupt, syscall.SIGTERM)
 	// signal.Notify(sigs,syscall.SIGQUIT)
 	// Method invoked on signal receive
 	go func() {
